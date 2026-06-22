@@ -4,20 +4,25 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sensi — Find Your Perfect Sensitivity</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --bg:       #0a0a0b;
-      --surface:  #111113;
-      --border:   #1e1e22;
-      --muted:    #3a3a42;
-      --text:     #e8e8ec;
-      --sub:      #6b6b78;
-      --accent:   #7c6fff;
-      --accent2:  #5b4fe0;
-      --green:    #4fffb0;
-      --red:      #ff4f6b;
+      --bg:       #10101a;
+      --surface:  #161622;
+      --surface2: #1c1c2e;
+      --border:   #252538;
+      --muted:    #42425e;
+      --text:     #eeeef5;
+      --sub:      #7070a0;
+      --accent:   #8b7fff;
+      --accent2:  #6c5ce7;
+      --glow:     rgba(139,127,255,0.18);
+      --green:    #00e5a0;
+      --orange:   #ff9f43;
+      --red:      #ff6b81;
     }
 
     html { scroll-behavior: smooth; }
@@ -25,7 +30,7 @@
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      font-family: 'Space Grotesk', system-ui, sans-serif;
       font-size: 15px;
       line-height: 1.6;
       overflow-x: hidden;
@@ -33,52 +38,51 @@
 
     /* ── NAV ── */
     nav {
-      position: fixed; top: 0; left: 0; right: 0;
-      z-index: 100;
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       display: flex; align-items: center; justify-content: space-between;
-      padding: 0 40px;
-      height: 60px;
-      background: rgba(10,10,11,0.85);
-      backdrop-filter: blur(16px);
+      padding: 0 48px; height: 64px;
+      background: rgba(16,16,26,0.8);
+      backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
     }
 
     .logo {
-      font-size: 18px;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-      color: var(--text);
+      font-size: 20px; font-weight: 800;
+      letter-spacing: -1px;
+      display: flex; align-items: center; gap: 8px;
     }
-    .logo span { color: var(--accent); }
+    .logo-icon {
+      width: 30px; height: 30px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+    }
 
-    .nav-links {
-      display: flex; gap: 32px; list-style: none;
-    }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
     .nav-links a {
       color: var(--sub); text-decoration: none;
-      font-size: 13px; font-weight: 500;
-      letter-spacing: 0.2px;
+      font-size: 14px; font-weight: 500;
       transition: color .15s;
     }
     .nav-links a:hover { color: var(--text); }
 
     .btn {
       display: inline-flex; align-items: center; gap: 8px;
-      padding: 9px 20px;
-      border-radius: 8px;
-      font-size: 13px; font-weight: 600;
+      padding: 9px 20px; border-radius: 10px;
+      font-size: 14px; font-weight: 700;
       cursor: pointer; border: none;
-      transition: all .15s;
-      text-decoration: none;
+      transition: all .18s; text-decoration: none;
+      font-family: inherit;
     }
     .btn-primary {
-      background: var(--accent);
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
       color: #fff;
+      box-shadow: 0 4px 20px rgba(139,127,255,0.3);
     }
-    .btn-primary:hover { background: var(--accent2); transform: translateY(-1px); }
-
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(139,127,255,0.4); }
     .btn-ghost {
-      background: transparent;
+      background: var(--surface2);
       color: var(--sub);
       border: 1px solid var(--border);
     }
@@ -91,427 +95,520 @@
       align-items: center; justify-content: center;
       text-align: center;
       padding: 120px 40px 80px;
-      position: relative;
-      overflow: hidden;
+      position: relative; overflow: hidden;
     }
 
-    .hero::before {
-      content: '';
-      position: absolute;
-      width: 600px; height: 600px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(124,111,255,0.08) 0%, transparent 70%);
-      top: 50%; left: 50%;
-      transform: translate(-50%, -60%);
-      pointer-events: none;
+    .hero-bg {
+      position: absolute; inset: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 800px 500px at 50% 20%, rgba(139,127,255,0.07) 0%, transparent 70%),
+        radial-gradient(ellipse 400px 400px at 80% 60%, rgba(0,229,160,0.04) 0%, transparent 60%),
+        radial-gradient(ellipse 300px 300px at 20% 70%, rgba(255,107,129,0.04) 0%, transparent 60%);
     }
 
-    .hero-badge {
+    /* floating orbs */
+    .orb {
+      position: absolute; border-radius: 50%;
+      filter: blur(60px); pointer-events: none;
+    }
+    .orb1 {
+      width: 300px; height: 300px;
+      background: rgba(139,127,255,0.06);
+      top: 10%; left: 10%;
+      animation: float1 8s ease-in-out infinite;
+    }
+    .orb2 {
+      width: 200px; height: 200px;
+      background: rgba(0,229,160,0.05);
+      top: 50%; right: 8%;
+      animation: float2 10s ease-in-out infinite;
+    }
+
+    @keyframes float1 {
+      0%,100% { transform: translate(0,0); }
+      50% { transform: translate(30px, 20px); }
+    }
+    @keyframes float2 {
+      0%,100% { transform: translate(0,0); }
+      50% { transform: translate(-20px, 30px); }
+    }
+
+    .hero-pill {
       display: inline-flex; align-items: center; gap: 8px;
-      background: rgba(124,111,255,0.1);
-      border: 1px solid rgba(124,111,255,0.2);
+      background: rgba(139,127,255,0.12);
+      border: 1px solid rgba(139,127,255,0.25);
       color: var(--accent);
-      font-size: 12px; font-weight: 600;
-      letter-spacing: 0.5px; text-transform: uppercase;
-      padding: 5px 14px;
-      border-radius: 100px;
-      margin-bottom: 28px;
+      font-size: 12px; font-weight: 700;
+      letter-spacing: 0.5px;
+      padding: 6px 16px; border-radius: 100px;
+      margin-bottom: 32px;
     }
-    .hero-badge .dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--accent);
-      animation: pulse 2s infinite;
+    .live-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+      animation: blink 1.8s infinite;
     }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
-    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
     h1 {
-      font-size: clamp(36px, 5vw, 64px);
+      font-size: clamp(40px, 5.5vw, 72px);
       font-weight: 800;
-      letter-spacing: -2px;
-      line-height: 1.1;
-      max-width: 680px;
-      margin-bottom: 20px;
+      letter-spacing: -2.5px;
+      line-height: 1.05;
+      max-width: 700px;
+      margin-bottom: 24px;
     }
-    h1 em {
-      font-style: normal;
-      color: var(--accent);
+    .h1-line2 {
+      background: linear-gradient(90deg, var(--accent), var(--green));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .hero-sub {
-      font-size: 16px;
-      color: var(--sub);
-      max-width: 480px;
-      margin-bottom: 40px;
-      line-height: 1.7;
+      font-size: 16px; color: var(--sub);
+      max-width: 460px; margin-bottom: 44px;
+      line-height: 1.75;
     }
 
     .hero-cta {
       display: flex; gap: 12px; flex-wrap: wrap;
-      justify-content: center;
-      margin-bottom: 72px;
+      justify-content: center; margin-bottom: 80px;
     }
 
-    .stat-row {
-      display: flex; gap: 48px;
-      justify-content: center;
+    /* ── STATS ── */
+    .stats {
+      display: flex; gap: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
     }
-    .stat { text-align: center; }
+    .stat {
+      padding: 20px 36px; text-align: center;
+      border-right: 1px solid var(--border);
+    }
+    .stat:last-child { border-right: none; }
     .stat-val {
-      font-size: 22px; font-weight: 700;
-      letter-spacing: -0.5px;
+      font-size: 26px; font-weight: 800;
+      letter-spacing: -1px;
+      background: linear-gradient(135deg, var(--text), var(--sub));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
-    .stat-lbl {
-      font-size: 12px; color: var(--sub);
-      margin-top: 2px;
-    }
+    .stat-lbl { font-size: 12px; color: var(--sub); margin-top: 2px; font-weight: 500; }
 
     /* ── SECTION ── */
-    section {
+    .section-wrap {
       padding: 100px 40px;
-      max-width: 1100px;
+      max-width: 1120px;
       margin: 0 auto;
     }
 
-    .section-label {
+    .tag {
+      display: inline-flex; align-items: center; gap: 6px;
       font-size: 11px; font-weight: 700;
       letter-spacing: 1.5px; text-transform: uppercase;
       color: var(--accent);
-      margin-bottom: 12px;
+      margin-bottom: 14px;
     }
+    .tag::before {
+      content: '';
+      width: 16px; height: 2px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+
     h2 {
-      font-size: clamp(26px, 3vw, 40px);
-      font-weight: 800;
-      letter-spacing: -1px;
-      line-height: 1.2;
-      margin-bottom: 16px;
+      font-size: clamp(28px, 3.5vw, 44px);
+      font-weight: 800; letter-spacing: -1.5px;
+      line-height: 1.15; margin-bottom: 14px;
     }
     .section-sub {
-      color: var(--sub);
-      font-size: 15px;
-      max-width: 500px;
-      margin-bottom: 56px;
+      color: var(--sub); font-size: 15px;
+      max-width: 440px; margin-bottom: 56px;
+      line-height: 1.7;
     }
 
     /* ── STEPS ── */
     .steps {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2px;
+      grid-template-columns: repeat(3,1fr);
+      gap: 16px;
     }
     .step {
       background: var(--surface);
-      padding: 36px 32px;
-      position: relative;
       border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px 28px;
+      position: relative;
+      transition: border-color .2s, transform .2s;
     }
-    .step:first-child { border-radius: 16px 0 0 16px; }
-    .step:last-child  { border-radius: 0 16px 16px 0; }
+    .step:hover { border-color: var(--muted); transform: translateY(-3px); }
 
     .step-num {
+      position: absolute; top: 24px; right: 24px;
       font-size: 11px; font-weight: 700;
-      color: var(--muted);
-      letter-spacing: 1px;
-      margin-bottom: 20px;
+      color: var(--border); letter-spacing: 1px;
     }
     .step-icon {
-      width: 44px; height: 44px;
-      border-radius: 12px;
-      background: rgba(124,111,255,0.1);
+      width: 52px; height: 52px; border-radius: 16px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 20px;
-      margin-bottom: 20px;
+      font-size: 24px; margin-bottom: 20px;
     }
-    .step h3 {
-      font-size: 16px; font-weight: 700;
-      margin-bottom: 10px;
-      letter-spacing: -0.3px;
-    }
-    .step p { font-size: 13px; color: var(--sub); line-height: 1.6; }
+    .icon-purple { background: rgba(139,127,255,0.12); }
+    .icon-green  { background: rgba(0,229,160,0.1); }
+    .icon-orange { background: rgba(255,159,67,0.1); }
 
-    /* ── TEST PREVIEW ── */
+    .step h3 { font-size: 16px; font-weight: 700; margin-bottom: 10px; letter-spacing: -0.3px; }
+    .step p   { font-size: 13px; color: var(--sub); line-height: 1.65; }
+
+    /* ── EXERCISES ── */
+    .exercises {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+    .ex-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 18px;
+      padding: 24px 22px;
+      cursor: pointer;
+      transition: all .18s;
+      position: relative;
+      overflow: hidden;
+    }
+    .ex-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      opacity: 0; transition: opacity .2s;
+    }
+    .ex-card.purple::before { background: linear-gradient(90deg, var(--accent), transparent); }
+    .ex-card.green::before  { background: linear-gradient(90deg, var(--green), transparent); }
+    .ex-card.orange::before { background: linear-gradient(90deg, var(--orange), transparent); }
+    .ex-card:hover, .ex-card.active { border-color: var(--muted); transform: translateY(-2px); }
+    .ex-card:hover::before, .ex-card.active::before { opacity: 1; }
+    .ex-card.active { background: var(--surface2); }
+
+    .ex-icon { font-size: 28px; margin-bottom: 14px; }
+    .ex-card h4 { font-size: 15px; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.2px; }
+    .ex-card p  { font-size: 12px; color: var(--sub); line-height: 1.55; }
+    .ex-diff {
+      margin-top: 16px; display: inline-block;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.5px; text-transform: uppercase;
+      padding: 3px 10px; border-radius: 100px;
+    }
+    .diff-easy   { background: rgba(0,229,160,0.1); color: var(--green); }
+    .diff-medium { background: rgba(255,159,67,0.1); color: var(--orange); }
+    .diff-hard   { background: rgba(255,107,129,0.1); color: var(--red); }
+
+    /* ── TEST CANVAS ── */
     .test-preview {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 20px;
+      border-radius: 24px;
       overflow: hidden;
     }
 
-    .test-header {
-      padding: 20px 28px;
+    .test-topbar {
+      padding: 18px 28px;
       border-bottom: 1px solid var(--border);
       display: flex; align-items: center; justify-content: space-between;
     }
     .test-title {
-      font-size: 13px; font-weight: 600;
       display: flex; align-items: center; gap: 10px;
+      font-size: 14px; font-weight: 700;
     }
-    .test-badge {
+    .chip {
       font-size: 10px; font-weight: 700;
       letter-spacing: 0.5px; text-transform: uppercase;
-      padding: 3px 8px;
-      border-radius: 100px;
-      background: rgba(79,255,176,0.1);
-      color: var(--green);
-      border: 1px solid rgba(79,255,176,0.2);
+      padding: 4px 10px; border-radius: 100px;
     }
-    .test-meta {
-      display: flex; gap: 20px;
-      font-size: 12px; color: var(--sub);
-    }
-    .test-meta span { display: flex; align-items: center; gap: 6px; }
+    .chip-green { background: rgba(0,229,160,0.12); color: var(--green); border: 1px solid rgba(0,229,160,0.2); }
+    .chip-accent { background: rgba(139,127,255,0.12); color: var(--accent); border: 1px solid rgba(139,127,255,0.2); }
 
-    .test-canvas {
-      height: 320px;
-      position: relative;
+    .test-stats {
+      display: flex; gap: 24px;
+    }
+    .ts-item {
+      display: flex; flex-direction: column; align-items: flex-end;
+    }
+    .ts-val { font-size: 15px; font-weight: 800; letter-spacing: -0.5px; }
+    .ts-lbl { font-size: 10px; color: var(--sub); font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase; }
+
+    .canvas-area {
+      height: 340px; position: relative; overflow: hidden; cursor: crosshair;
       background:
-        radial-gradient(ellipse at 50% 100%, rgba(124,111,255,0.04) 0%, transparent 70%),
-        repeating-linear-gradient(0deg, transparent, transparent 39px, var(--border) 39px, var(--border) 40px),
-        repeating-linear-gradient(90deg, transparent, transparent 39px, var(--border) 39px, var(--border) 40px);
-      display: flex; align-items: center; justify-content: center;
-      overflow: hidden;
-      cursor: crosshair;
+        radial-gradient(ellipse 60% 80% at 50% 110%, rgba(139,127,255,0.05) 0%, transparent 70%),
+        repeating-linear-gradient(0deg, transparent, transparent 47px, rgba(255,255,255,0.02) 47px, rgba(255,255,255,0.02) 48px),
+        repeating-linear-gradient(90deg, transparent, transparent 47px, rgba(255,255,255,0.02) 47px, rgba(255,255,255,0.02) 48px);
     }
 
+    /* targets */
     .target {
       position: absolute;
       border-radius: 50%;
-      border: 2px solid;
       display: flex; align-items: center; justify-content: center;
+      transform: translate(-50%, -50%);
     }
-    .target-main {
-      width: 52px; height: 52px;
-      border-color: var(--accent);
-      background: rgba(124,111,255,0.08);
-      top: 38%; left: 55%;
-      animation: breathe 2s ease-in-out infinite;
+    .t-main {
+      width: 56px; height: 56px;
+      border: 2px solid var(--accent);
+      background: rgba(139,127,255,0.08);
+      top: 42%; left: 58%;
+      animation: targetPulse 2.2s ease-in-out infinite;
+      box-shadow: 0 0 0 0 rgba(139,127,255,0.4);
     }
-    .target-main::after {
+    .t-main::after {
       content: '';
-      width: 8px; height: 8px;
-      border-radius: 50%;
+      width: 10px; height: 10px; border-radius: 50%;
       background: var(--accent);
+      box-shadow: 0 0 10px var(--accent);
     }
-    .target-ghost {
-      width: 36px; height: 36px;
-      border-color: var(--muted);
-      opacity: 0.3;
+    .t-ghost {
+      border: 1.5px solid var(--muted);
+      background: transparent; opacity: 0.2;
     }
-    .target-ghost:nth-child(2) { top: 20%; left: 25%; }
-    .target-ghost:nth-child(3) { top: 65%; left: 70%; }
-    .target-ghost:nth-child(4) { top: 70%; left: 30%; }
+    .t-ghost1 { width: 40px; height: 40px; top: 22%; left: 22%; }
+    .t-ghost2 { width: 40px; height: 40px; top: 68%; left: 72%; }
+    .t-ghost3 { width: 32px; height: 32px; top: 75%; left: 32%; }
 
-    @keyframes breathe {
-      0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(124,111,255,0.3); }
-      50% { transform: scale(1.05); box-shadow: 0 0 0 12px rgba(124,111,255,0); }
-    }
-
-    .crosshair {
+    /* hit fx */
+    .hit-ring {
       position: absolute;
-      top: 45%; left: 58%;
-      width: 16px; height: 16px;
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      border: 2px solid var(--green);
+      top: 25%; left: 40%;
+      transform: translate(-50%,-50%) scale(1.4);
+      opacity: 0;
+      animation: hitFade 1.8s ease-out infinite 0.5s;
     }
-    .crosshair::before, .crosshair::after {
-      content: '';
-      position: absolute;
-      background: rgba(255,255,255,0.8);
+    @keyframes hitFade {
+      0% { opacity: 0.7; transform: translate(-50%,-50%) scale(1); }
+      100% { opacity: 0; transform: translate(-50%,-50%) scale(2.2); }
     }
-    .crosshair::before { width: 1px; height: 100%; left: 50%; }
-    .crosshair::after  { height: 1px; width: 100%; top: 50%; }
 
-    .test-hud {
-      position: absolute;
-      top: 16px; left: 20px;
-      display: flex; flex-direction: column; gap: 8px;
+    @keyframes targetPulse {
+      0%,100% { box-shadow: 0 0 0 0 rgba(139,127,255,0.4); transform: translate(-50%,-50%) scale(1); }
+      50% { box-shadow: 0 0 0 14px rgba(139,127,255,0); transform: translate(-50%,-50%) scale(1.05); }
     }
-    .hud-item {
-      font-size: 11px; font-weight: 600;
-      color: var(--sub);
-      letter-spacing: 0.3px;
-      display: flex; gap: 8px;
-    }
-    .hud-item span:last-child { color: var(--text); }
 
-    .test-footer {
-      padding: 20px 28px;
+    /* crosshair */
+    .xhair {
+      position: absolute; top: 46%; left: 61%;
+      transform: translate(-50%,-50%);
+      width: 18px; height: 18px;
+      pointer-events: none;
+    }
+    .xhair::before {
+      content: ''; position: absolute;
+      top: 50%; left: 0; right: 0; height: 1.5px;
+      background: rgba(255,255,255,0.9);
+      transform: translateY(-50%);
+    }
+    .xhair::after {
+      content: ''; position: absolute;
+      left: 50%; top: 0; bottom: 0; width: 1.5px;
+      background: rgba(255,255,255,0.9);
+      transform: translateX(-50%);
+    }
+    .xhair-dot {
+      position: absolute;
+      width: 4px; height: 4px; border-radius: 50%;
+      background: rgba(255,255,255,0.9);
+      top: 50%; left: 50%; transform: translate(-50%,-50%);
+    }
+
+    /* HUD overlay */
+    .hud {
+      position: absolute; top: 18px; left: 22px;
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .hud-row {
+      display: flex; align-items: center; gap: 10px;
+      background: rgba(16,16,26,0.7);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 5px 12px;
+      backdrop-filter: blur(8px);
+    }
+    .hud-key { font-size: 10px; font-weight: 600; color: var(--sub); text-transform: uppercase; letter-spacing: 0.5px; }
+    .hud-val { font-size: 12px; font-weight: 800; letter-spacing: -0.3px; }
+    .hud-val.up { color: var(--green); }
+    .hud-val.neutral { color: var(--text); }
+
+    .test-bottom {
+      padding: 18px 28px;
       border-top: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: space-between;
+      display: flex; align-items: center; gap: 16px;
     }
-    .progress-wrap {
-      flex: 1; max-width: 260px;
-      height: 3px; background: var(--border);
-      border-radius: 10px; overflow: hidden;
+    .progress-label { font-size: 12px; color: var(--sub); font-weight: 600; white-space: nowrap; }
+    .progress-track {
+      flex: 1; height: 4px;
+      background: var(--border); border-radius: 10px; overflow: hidden;
     }
-    .progress-bar {
-      height: 100%; width: 45%;
+    .progress-fill {
+      height: 100%; width: 40%;
       background: linear-gradient(90deg, var(--accent), var(--green));
       border-radius: 10px;
-      animation: prog 3s ease-in-out infinite alternate;
+      animation: pfill 3s ease-in-out infinite alternate;
     }
-    @keyframes prog {
-      from { width: 35%; }
-      to   { width: 55%; }
-    }
-    .progress-label { font-size: 12px; color: var(--sub); margin-right: 16px; }
+    @keyframes pfill { from{width:32%} to{width:52%} }
 
-    /* ── EXERCISES GRID ── */
-    .exercises {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-    }
-    .ex-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 24px;
-      transition: border-color .15s, transform .15s;
-      cursor: pointer;
-    }
-    .ex-card:hover {
-      border-color: var(--muted);
-      transform: translateY(-2px);
-    }
-    .ex-card.active {
-      border-color: var(--accent);
-      background: rgba(124,111,255,0.04);
-    }
-    .ex-icon {
-      font-size: 24px; margin-bottom: 14px;
-    }
-    .ex-card h4 {
-      font-size: 14px; font-weight: 700;
-      margin-bottom: 6px;
-      letter-spacing: -0.2px;
-    }
-    .ex-card p { font-size: 12px; color: var(--sub); line-height: 1.5; }
-    .ex-difficulty {
-      margin-top: 14px;
-      font-size: 11px; font-weight: 600;
-      letter-spacing: 0.5px; text-transform: uppercase;
-    }
-    .diff-easy   { color: var(--green); }
-    .diff-medium { color: #ffb84f; }
-    .diff-hard   { color: var(--red); }
-
-    /* ── RESULT CARD ── */
-    .result-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 48px;
+    /* ── RESULT ── */
+    .result-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 48px;
-      align-items: center;
+      gap: 20px;
+      align-items: start;
     }
 
-    .result-main .label {
+    .result-main {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 40px 36px;
+      position: relative; overflow: hidden;
+    }
+    .result-main::after {
+      content: '';
+      position: absolute; bottom: -60px; right: -60px;
+      width: 200px; height: 200px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(139,127,255,0.08), transparent 70%);
+      pointer-events: none;
+    }
+
+    .result-lbl {
       font-size: 11px; font-weight: 700;
       letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--sub); margin-bottom: 16px;
+    }
+    .result-number {
+      font-size: 80px; font-weight: 800;
+      letter-spacing: -4px; line-height: 1;
+      background: linear-gradient(135deg, var(--accent), var(--green));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 6px;
+    }
+    .result-unit { font-size: 14px; color: var(--sub); margin-bottom: 28px; font-weight: 500; }
+
+    .profile-tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(0,229,160,0.08);
+      border: 1px solid rgba(0,229,160,0.18);
+      border-radius: 10px;
+      padding: 8px 14px;
+      margin-bottom: 20px;
+    }
+    .profile-tag-icon { font-size: 16px; }
+    .profile-tag-text { font-size: 13px; font-weight: 700; color: var(--green); }
+
+    .result-desc { font-size: 13px; color: var(--sub); line-height: 1.65; }
+
+    .games-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      overflow: hidden;
+    }
+    .games-top {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .games-top h4 { font-size: 14px; font-weight: 700; }
+    .games-top span { font-size: 12px; color: var(--sub); }
+
+    .game-item {
+      display: flex; align-items: center;
+      padding: 14px 24px; gap: 14px;
+      border-bottom: 1px solid var(--border);
+      transition: background .12s;
+      cursor: pointer;
+    }
+    .game-item:last-child { border-bottom: none; }
+    .game-item:hover { background: var(--surface2); }
+
+    .game-color {
+      width: 32px; height: 32px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; flex-shrink: 0;
+    }
+    .game-info { flex: 1; }
+    .game-name { font-size: 13px; font-weight: 700; }
+    .game-detail { font-size: 11px; color: var(--sub); margin-top: 1px; }
+
+    .game-sens {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .sens-val { font-size: 15px; font-weight: 800; letter-spacing: -0.3px; font-variant-numeric: tabular-nums; }
+    .copy-btn {
+      width: 28px; height: 28px; border-radius: 8px;
+      background: var(--border);
+      border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; transition: all .12s;
       color: var(--sub);
-      margin-bottom: 12px;
     }
-    .result-value {
-      font-size: 72px; font-weight: 800;
-      letter-spacing: -3px;
-      line-height: 1;
-      color: var(--accent);
-      margin-bottom: 4px;
-    }
-    .result-unit {
-      font-size: 14px; color: var(--sub);
-      margin-bottom: 24px;
-    }
-    .result-desc {
-      font-size: 13px; color: var(--sub);
-      line-height: 1.6;
-      max-width: 300px;
+    .copy-btn:hover { background: var(--muted); color: var(--text); }
+
+    .games-footer {
+      padding: 14px 24px;
+      border-top: 1px solid var(--border);
     }
 
-    .result-games {
-      display: flex; flex-direction: column; gap: 12px;
+    /* ── DIVIDER ── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
     }
-    .game-row {
-      display: flex; align-items: center;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 12px 16px;
-      gap: 14px;
-    }
-    .game-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-    .game-name {
-      flex: 1; font-size: 13px; font-weight: 600;
-    }
-    .game-val {
-      font-size: 13px;
-      font-weight: 700;
-      font-variant-numeric: tabular-nums;
-      color: var(--text);
-    }
-    .game-copy {
-      font-size: 11px; color: var(--muted);
-      cursor: pointer;
-      transition: color .1s;
-    }
-    .game-copy:hover { color: var(--accent); }
 
     /* ── FOOTER ── */
     footer {
-      border-top: 1px solid var(--border);
+      max-width: 1120px; margin: 0 auto;
       padding: 40px;
       display: flex; align-items: center; justify-content: space-between;
-      max-width: 1100px; margin: 0 auto;
     }
-    footer .logo { font-size: 15px; }
     footer p { font-size: 12px; color: var(--sub); }
 
-    /* ── DIVIDER ── */
-    hr {
-      border: none;
-      border-top: 1px solid var(--border);
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
     /* ── SCROLLBAR ── */
-    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: var(--bg); }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
 
-    /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
       nav { padding: 0 20px; }
       .nav-links { display: none; }
-      section { padding: 60px 20px; }
+      .section-wrap { padding: 60px 20px; }
       .steps { grid-template-columns: 1fr; }
-      .step:first-child { border-radius: 16px 16px 0 0; }
-      .step:last-child  { border-radius: 0 0 16px 16px; }
       .exercises { grid-template-columns: 1fr; }
-      .result-card { grid-template-columns: 1fr; gap: 32px; padding: 28px; }
-      .result-value { font-size: 52px; }
-      .stat-row { gap: 28px; }
+      .result-grid { grid-template-columns: 1fr; }
+      .result-number { font-size: 60px; }
+      .stats { flex-direction: column; }
+      .stat { border-right: none; border-bottom: 1px solid var(--border); }
     }
   </style>
 </head>
 <body>
 
-<!-- ── NAV ── -->
+<!-- NAV -->
 <nav>
-  <div class="logo">sensi<span>.</span></div>
+  <div class="logo">
+    <div class="logo-icon">🎯</div>
+    sensi
+  </div>
   <ul class="nav-links">
     <li><a href="#how">Comment ça marche</a></li>
     <li><a href="#test">Le test</a></li>
-    <li><a href="#convert">Conversion</a></li>
+    <li><a href="#result">Résultat</a></li>
   </ul>
   <div style="display:flex;gap:10px">
     <a href="#" class="btn btn-ghost">Connexion</a>
@@ -519,23 +616,38 @@
   </div>
 </nav>
 
-<!-- ── HERO ── -->
+<!-- HERO -->
 <div class="hero">
-  <div class="hero-badge">
-    <div class="dot"></div>
-    Bêta publique
+  <div class="hero-bg"></div>
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+
+  <div class="hero-pill">
+    <div class="live-dot"></div>
+    Bêta ouverte — c'est gratuit
   </div>
-  <h1>Ta sensibilité<br /><em>parfaite</em>, enfin trouvée.</h1>
+
+  <h1>
+    Trouve ta sens<br />
+    <span class="h1-line2">une fois pour toutes.</span>
+  </h1>
+
   <p class="hero-sub">
-    Un test calibré qui analyse tes mouvements, calcule ta sensibilité idéale en cm/360°, et te donne les réglages exacts pour chaque jeu.
+    3 minutes de test, un algorithme qui apprend de tes mouvements, et les réglages exacts pour chaque jeu.
   </p>
+
   <div class="hero-cta">
-    <a href="#test" class="btn btn-primary" style="padding:12px 28px;font-size:14px">Lancer le test — gratuit</a>
-    <a href="#how" class="btn btn-ghost" style="padding:12px 28px;font-size:14px">Voir comment ça marche</a>
+    <a href="#test" class="btn btn-primary" style="padding:13px 30px;font-size:15px">
+      🎯 Lancer le test
+    </a>
+    <a href="#how" class="btn btn-ghost" style="padding:13px 30px;font-size:15px">
+      Voir comment ça marche
+    </a>
   </div>
-  <div class="stat-row">
+
+  <div class="stats">
     <div class="stat">
-      <div class="stat-val">3 min</div>
+      <div class="stat-val">~3 min</div>
       <div class="stat-lbl">Durée du test</div>
     </div>
     <div class="stat">
@@ -546,174 +658,237 @@
       <div class="stat-val">cm/360°</div>
       <div class="stat-lbl">Standard universel</div>
     </div>
+    <div class="stat">
+      <div class="stat-val">100%</div>
+      <div class="stat-lbl">Dans le navigateur</div>
+    </div>
   </div>
 </div>
 
-<hr />
+<hr class="divider" />
 
-<!-- ── HOW IT WORKS ── -->
-<section id="how">
-  <div class="section-label">Comment ça marche</div>
-  <h2>Simple, rapide,<br />précis.</h2>
-  <p class="section-sub">Trois étapes pour ne plus jamais tâtonner avec ta sensibilité.</p>
+<!-- HOW -->
+<div class="section-wrap" id="how">
+  <div class="tag">Comment ça marche</div>
+  <h2>Trois étapes,<br />zéro galère.</h2>
+  <p class="section-sub">Plus besoin de tâtonner pendant des heures. On s'occupe de tout.</p>
 
   <div class="steps">
     <div class="step">
       <div class="step-num">01</div>
-      <div class="step-icon">🖱️</div>
+      <div class="step-icon icon-purple">🖱️</div>
       <h3>Entre ton DPI</h3>
-      <p>Renseigne le DPI de ta souris (trouvable sur le site du fabricant ou dans ton logiciel). C'est la seule info dont on a besoin.</p>
+      <p>La seule info dont on a besoin. Retrouvable dans le logiciel de ta souris ou sur le site du fabricant en 30 secondes.</p>
     </div>
     <div class="step">
-      <div class="step-icon">🎯</div>
       <div class="step-num">02</div>
+      <div class="step-icon icon-green">🎯</div>
       <h3>Passe les exercices</h3>
-      <p>Tracking, flick shots, micro-ajustements. Notre algo adapte la sensibilité en temps réel et converge vers ton optimum.</p>
+      <p>Flick, tracking, micro-ajustement. L'algo ajuste la sensibilité en temps réel selon tes réactions et converge vers ton optimum.</p>
     </div>
     <div class="step">
-      <div class="step-icon">⚡</div>
       <div class="step-num">03</div>
+      <div class="step-icon icon-orange">⚡</div>
       <h3>Récupère tes réglages</h3>
-      <p>On te donne la valeur exacte à entrer dans chaque jeu, avec tous les détails (FOV, raw input, etc.).</p>
+      <p>Ta valeur cm/360° idéale, convertie instantanément dans chaque jeu avec tous les détails : FOV, raw input, scope mult.</p>
     </div>
   </div>
-</section>
+</div>
 
-<hr />
+<hr class="divider" />
 
-<!-- ── TEST PREVIEW ── -->
-<section id="test">
-  <div class="section-label">Le test</div>
-  <h2>Des exercices pensés<br />pour te calibrer.</h2>
-  <p class="section-sub">Chaque exercice mesure un aspect différent de ta précision.</p>
+<!-- TEST -->
+<div class="section-wrap" id="test">
+  <div class="tag">Le test</div>
+  <h2>Des exercices calibrés<br />pour ton profil.</h2>
+  <p class="section-sub">Chaque mini-jeu mesure un aspect différent de ta précision.</p>
 
-  <!-- Exercise cards -->
-  <div class="exercises" style="margin-bottom:32px">
-    <div class="ex-card active">
+  <div class="exercises">
+    <div class="ex-card purple active">
       <div class="ex-icon">🎯</div>
       <h4>Flick Shot</h4>
-      <p>Snap instantané vers des cibles qui apparaissent à des positions aléatoires.</p>
-      <div class="ex-difficulty diff-medium">Medium</div>
+      <p>Snap instantané vers des cibles qui apparaissent aléatoirement. Teste ta vitesse de réaction et ta précision.</p>
+      <span class="ex-diff diff-medium">Medium</span>
     </div>
-    <div class="ex-card">
+    <div class="ex-card green">
       <div class="ex-icon">🔄</div>
       <h4>Tracking</h4>
-      <p>Maintiens ta visée sur une cible en mouvement fluide et continu.</p>
-      <div class="ex-difficulty diff-easy">Easy</div>
+      <p>Maintiens ta visée sur une cible en mouvement. Idéal pour calibrer les duels prolongés.</p>
+      <span class="ex-diff diff-easy">Easy</span>
     </div>
-    <div class="ex-card">
+    <div class="ex-card orange">
       <div class="ex-icon">🔬</div>
       <h4>Micro-ajustement</h4>
-      <p>Corrige une visée qui dépasse légèrement pour tester la précision fine.</p>
-      <div class="ex-difficulty diff-hard">Hard</div>
+      <p>Corrige une visée légèrement décalée. Mesure ton contrôle de précision au pixel près.</p>
+      <span class="ex-diff diff-hard">Hard</span>
     </div>
   </div>
 
-  <!-- Canvas preview -->
   <div class="test-preview">
-    <div class="test-header">
+    <div class="test-topbar">
       <div class="test-title">
         Flick Shot
-        <span class="test-badge">En cours</span>
+        <span class="chip chip-green">● En cours</span>
       </div>
-      <div class="test-meta">
-        <span>⏱ 01:24</span>
-        <span>🎯 14/20 hits</span>
-        <span>📊 Série × 4</span>
-      </div>
-    </div>
-
-    <div class="test-canvas">
-      <div class="target target-ghost" style="top:18%;left:24%"></div>
-      <div class="target target-ghost" style="top:66%;left:68%"></div>
-      <div class="target target-ghost" style="top:72%;left:28%"></div>
-      <div class="target target-main"></div>
-      <div class="crosshair"></div>
-
-      <div class="test-hud">
-        <div class="hud-item"><span>SENS</span><span>38.4 cm/360</span></div>
-        <div class="hud-item"><span>PREC</span><span>71%</span></div>
-        <div class="hud-item"><span>AVG</span><span>187 ms</span></div>
+      <div class="test-stats">
+        <div class="ts-item">
+          <span class="ts-val">01:24</span>
+          <span class="ts-lbl">Temps</span>
+        </div>
+        <div class="ts-item">
+          <span class="ts-val" style="color:var(--green)">14/20</span>
+          <span class="ts-lbl">Hits</span>
+        </div>
+        <div class="ts-item">
+          <span class="ts-val" style="color:var(--accent)">×4</span>
+          <span class="ts-lbl">Série</span>
+        </div>
       </div>
     </div>
 
-    <div class="test-footer">
-      <span class="progress-label">Exercice 1/3</span>
-      <div class="progress-wrap">
-        <div class="progress-bar"></div>
+    <div class="canvas-area">
+      <div class="target t-ghost t-ghost1"></div>
+      <div class="target t-ghost t-ghost2"></div>
+      <div class="target t-ghost t-ghost3"></div>
+      <div class="target t-main"></div>
+      <div class="hit-ring"></div>
+
+      <div class="xhair"><div class="xhair-dot"></div></div>
+
+      <div class="hud">
+        <div class="hud-row">
+          <span class="hud-key">Sens</span>
+          <span class="hud-val neutral">38.4 cm/360</span>
+        </div>
+        <div class="hud-row">
+          <span class="hud-key">Préc</span>
+          <span class="hud-val up">71%</span>
+        </div>
+        <div class="hud-row">
+          <span class="hud-key">Avg</span>
+          <span class="hud-val neutral">187 ms</span>
+        </div>
       </div>
-      <div style="margin-left:20px;display:flex;gap:10px">
-        <button class="btn btn-ghost" style="font-size:12px;padding:7px 14px">Pause</button>
-        <button class="btn btn-primary" style="font-size:12px;padding:7px 14px">Suivant →</button>
+    </div>
+
+    <div class="test-bottom">
+      <span class="progress-label">Exercice 1 / 3</span>
+      <div class="progress-track">
+        <div class="progress-fill"></div>
       </div>
+      <button class="btn btn-ghost" style="font-size:12px;padding:8px 16px;flex-shrink:0">Pause</button>
+      <button class="btn btn-primary" style="font-size:12px;padding:8px 16px;flex-shrink:0">Suivant →</button>
     </div>
   </div>
-</section>
+</div>
 
-<hr />
+<hr class="divider" />
 
-<!-- ── RESULT ── -->
-<section id="convert">
-  <div class="section-label">Résultat & conversion</div>
-  <h2>Ta sensibilité,<br />prête à l'emploi.</h2>
-  <p class="section-sub">On convertit automatiquement vers tous tes jeux.</p>
+<!-- RESULT -->
+<div class="section-wrap" id="result">
+  <div class="tag">Résultat</div>
+  <h2>Ta sensibilité,<br />prête à copier-coller.</h2>
+  <p class="section-sub">Convertie automatiquement pour chaque jeu installé.</p>
 
-  <div class="result-card">
+  <div class="result-grid">
     <div class="result-main">
-      <div class="label">Ta sensibilité universelle</div>
-      <div class="result-value">38.4</div>
-      <div class="result-unit">cm / 360°</div>
+      <div class="result-lbl">Ta sensibilité universelle</div>
+      <div class="result-number">38.4</div>
+      <div class="result-unit">centimètres par 360°</div>
+
+      <div class="profile-tag">
+        <span class="profile-tag-icon">🎮</span>
+        <span class="profile-tag-text">Profil : Polyvalent FPS</span>
+      </div>
+
       <p class="result-desc">
-        Profil polyvalent — idéal pour les FPS compétitifs. Tu explores bien la map sans sacrifier la précision sur les duels rapprochés.
+        Tu contrôles bien sans sacrifier la réactivité. Ce profil est optimal pour des jeux comme Valorant, CS2 ou Apex — assez précis pour les duels serrés, assez rapide pour les rotations.
       </p>
     </div>
 
-    <div class="result-games">
-      <div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--sub);margin-bottom:4px">Réglages par jeu</div>
-
-      <div class="game-row">
-        <div class="game-dot" style="background:#e8642a"></div>
-        <div class="game-name">CS2</div>
-        <div class="game-val">1.24</div>
-        <div class="game-copy">copier</div>
-      </div>
-      <div class="game-row">
-        <div class="game-dot" style="background:#ff4757"></div>
-        <div class="game-name">Valorant</div>
-        <div class="game-val">0.413</div>
-        <div class="game-copy">copier</div>
-      </div>
-      <div class="game-row">
-        <div class="game-dot" style="background:#c8a951"></div>
-        <div class="game-name">Apex Legends</div>
-        <div class="game-val">2.89</div>
-        <div class="game-copy">copier</div>
-      </div>
-      <div class="game-row">
-        <div class="game-dot" style="background:#f5a623"></div>
-        <div class="game-name">Overwatch 2</div>
-        <div class="game-val">6.21</div>
-        <div class="game-copy">copier</div>
-      </div>
-      <div class="game-row">
-        <div class="game-dot" style="background:#00b4ff"></div>
-        <div class="game-name">Fortnite</div>
-        <div class="game-val">0.091</div>
-        <div class="game-copy">copier</div>
+    <div class="games-panel">
+      <div class="games-top">
+        <h4>Réglages par jeu</h4>
+        <span>800 DPI · 38.4 cm/360°</span>
       </div>
 
-      <button class="btn btn-ghost" style="justify-content:center;margin-top:4px;font-size:12px">
-        Voir tous les jeux (40+)
-      </button>
+      <div class="game-item">
+        <div class="game-color" style="background:rgba(232,100,42,0.12)">🔫</div>
+        <div class="game-info">
+          <div class="game-name">CS2</div>
+          <div class="game-detail">Raw input ON · FOV 90</div>
+        </div>
+        <div class="game-sens">
+          <span class="sens-val">1.24</span>
+          <button class="copy-btn">⎘</button>
+        </div>
+      </div>
+
+      <div class="game-item">
+        <div class="game-color" style="background:rgba(255,71,87,0.1)">🔴</div>
+        <div class="game-info">
+          <div class="game-name">Valorant</div>
+          <div class="game-detail">Raw input ON · FOV 103</div>
+        </div>
+        <div class="game-sens">
+          <span class="sens-val">0.413</span>
+          <button class="copy-btn">⎘</button>
+        </div>
+      </div>
+
+      <div class="game-item">
+        <div class="game-color" style="background:rgba(200,169,81,0.1)">🟡</div>
+        <div class="game-info">
+          <div class="game-name">Apex Legends</div>
+          <div class="game-detail">ADS mult. 1.0 · FOV 110</div>
+        </div>
+        <div class="game-sens">
+          <span class="sens-val">2.89</span>
+          <button class="copy-btn">⎘</button>
+        </div>
+      </div>
+
+      <div class="game-item">
+        <div class="game-color" style="background:rgba(245,166,35,0.1)">🟠</div>
+        <div class="game-info">
+          <div class="game-name">Overwatch 2</div>
+          <div class="game-detail">Relative · FOV 103</div>
+        </div>
+        <div class="game-sens">
+          <span class="sens-val">6.21</span>
+          <button class="copy-btn">⎘</button>
+        </div>
+      </div>
+
+      <div class="game-item">
+        <div class="game-color" style="background:rgba(0,180,255,0.1)">🔵</div>
+        <div class="game-info">
+          <div class="game-name">Fortnite</div>
+          <div class="game-detail">Build mode · FOV 80</div>
+        </div>
+        <div class="game-sens">
+          <span class="sens-val">0.091</span>
+          <button class="copy-btn">⎘</button>
+        </div>
+      </div>
+
+      <div class="games-footer">
+        <button class="btn btn-ghost" style="width:100%;justify-content:center;font-size:13px">
+          Voir les 40+ jeux disponibles
+        </button>
+      </div>
     </div>
   </div>
-</section>
+</div>
 
-<!-- ── FOOTER ── -->
-<hr />
+<hr class="divider" />
+
 <footer>
-  <div class="logo">sensi<span>.</span></div>
-  <p>Template — vision produit v0.1</p>
+  <div class="logo">
+    <div class="logo-icon">🎯</div>
+    sensi
+  </div>
+  <p>Template v0.2 — vision produit</p>
 </footer>
 
 </body>
