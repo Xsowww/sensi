@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sensi — Find Your Perfect Sensitivity</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg:       #0a0a0b;
+      --surface:  #111113;
+      --border:   #1e1e22;
+      --muted:    #3a3a42;
+      --text:     #e8e8ec;
+      --sub:      #6b6b78;
+      --accent:   #7c6fff;
+      --accent2:  #5b4fe0;
+      --green:    #4fffb0;
+      --red:      #ff4f6b;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px;
+      height: 60px;
+      background: rgba(10,10,11,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--text);
+    }
+    .logo span { color: var(--accent); }
+
+    .nav-links {
+      display: flex; gap: 32px; list-style: none;
+    }
+    .nav-links a {
+      color: var(--sub); text-decoration: none;
+      font-size: 13px; font-weight: 500;
+      letter-spacing: 0.2px;
+      transition: color .15s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 9px 20px;
+      border-radius: 8px;
+      font-size: 13px; font-weight: 600;
+      cursor: pointer; border: none;
+      transition: all .15s;
+      text-decoration: none;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+    .btn-primary:hover { background: var(--accent2); transform: translateY(-1px); }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--sub);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { border-color: var(--muted); color: var(--text); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 120px 40px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(124,111,255,0.08) 0%, transparent 70%);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -60%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(124,111,255,0.1);
+      border: 1px solid rgba(124,111,255,0.2);
+      color: var(--accent);
+      font-size: 12px; font-weight: 600;
+      letter-spacing: 0.5px; text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 100px;
+      margin-bottom: 28px;
+    }
+    .hero-badge .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    h1 {
+      font-size: clamp(36px, 5vw, 64px);
+      font-weight: 800;
+      letter-spacing: -2px;
+      line-height: 1.1;
+      max-width: 680px;
+      margin-bottom: 20px;
+    }
+    h1 em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    .hero-sub {
+      font-size: 16px;
+      color: var(--sub);
+      max-width: 480px;
+      margin-bottom: 40px;
+      line-height: 1.7;
+    }
+
+    .hero-cta {
+      display: flex; gap: 12px; flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 72px;
+    }
+
+    .stat-row {
+      display: flex; gap: 48px;
+      justify-content: center;
+    }
+    .stat { text-align: center; }
+    .stat-val {
+      font-size: 22px; font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+    .stat-lbl {
+      font-size: 12px; color: var(--sub);
+      margin-top: 2px;
+    }
+
+    /* ── SECTION ── */
+    section {
+      padding: 100px 40px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+    h2 {
+      font-size: clamp(26px, 3vw, 40px);
+      font-weight: 800;
+      letter-spacing: -1px;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+    .section-sub {
+      color: var(--sub);
+      font-size: 15px;
+      max-width: 500px;
+      margin-bottom: 56px;
+    }
+
+    /* ── STEPS ── */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+    .step {
+      background: var(--surface);
+      padding: 36px 32px;
+      position: relative;
+      border: 1px solid var(--border);
+    }
+    .step:first-child { border-radius: 16px 0 0 16px; }
+    .step:last-child  { border-radius: 0 16px 16px 0; }
+
+    .step-num {
+      font-size: 11px; font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 1px;
+      margin-bottom: 20px;
+    }
+    .step-icon {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      background: rgba(124,111,255,0.1);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+    .step h3 {
+      font-size: 16px; font-weight: 700;
+      margin-bottom: 10px;
+      letter-spacing: -0.3px;
+    }
+    .step p { font-size: 13px; color: var(--sub); line-height: 1.6; }
+
+    /* ── TEST PREVIEW ── */
+    .test-preview {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .test-header {
+      padding: 20px 28px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .test-title {
+      font-size: 13px; font-weight: 600;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .test-badge {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 0.5px; text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 100px;
+      background: rgba(79,255,176,0.1);
+      color: var(--green);
+      border: 1px solid rgba(79,255,176,0.2);
+    }
+    .test-meta {
+      display: flex; gap: 20px;
+      font-size: 12px; color: var(--sub);
+    }
+    .test-meta span { display: flex; align-items: center; gap: 6px; }
+
+    .test-canvas {
+      height: 320px;
+      position: relative;
+      background:
+        radial-gradient(ellipse at 50% 100%, rgba(124,111,255,0.04) 0%, transparent 70%),
+        repeating-linear-gradient(0deg, transparent, transparent 39px, var(--border) 39px, var(--border) 40px),
+        repeating-linear-gradient(90deg, transparent, transparent 39px, var(--border) 39px, var(--border) 40px);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+      cursor: crosshair;
+    }
+
+    .target {
+      position: absolute;
+      border-radius: 50%;
+      border: 2px solid;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .target-main {
+      width: 52px; height: 52px;
+      border-color: var(--accent);
+      background: rgba(124,111,255,0.08);
+      top: 38%; left: 55%;
+      animation: breathe 2s ease-in-out infinite;
+    }
+    .target-main::after {
+      content: '';
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+    .target-ghost {
+      width: 36px; height: 36px;
+      border-color: var(--muted);
+      opacity: 0.3;
+    }
+    .target-ghost:nth-child(2) { top: 20%; left: 25%; }
+    .target-ghost:nth-child(3) { top: 65%; left: 70%; }
+    .target-ghost:nth-child(4) { top: 70%; left: 30%; }
+
+    @keyframes breathe {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(124,111,255,0.3); }
+      50% { transform: scale(1.05); box-shadow: 0 0 0 12px rgba(124,111,255,0); }
+    }
+
+    .crosshair {
+      position: absolute;
+      top: 45%; left: 58%;
+      width: 16px; height: 16px;
+    }
+    .crosshair::before, .crosshair::after {
+      content: '';
+      position: absolute;
+      background: rgba(255,255,255,0.8);
+    }
+    .crosshair::before { width: 1px; height: 100%; left: 50%; }
+    .crosshair::after  { height: 1px; width: 100%; top: 50%; }
+
+    .test-hud {
+      position: absolute;
+      top: 16px; left: 20px;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .hud-item {
+      font-size: 11px; font-weight: 600;
+      color: var(--sub);
+      letter-spacing: 0.3px;
+      display: flex; gap: 8px;
+    }
+    .hud-item span:last-child { color: var(--text); }
+
+    .test-footer {
+      padding: 20px 28px;
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .progress-wrap {
+      flex: 1; max-width: 260px;
+      height: 3px; background: var(--border);
+      border-radius: 10px; overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%; width: 45%;
+      background: linear-gradient(90deg, var(--accent), var(--green));
+      border-radius: 10px;
+      animation: prog 3s ease-in-out infinite alternate;
+    }
+    @keyframes prog {
+      from { width: 35%; }
+      to   { width: 55%; }
+    }
+    .progress-label { font-size: 12px; color: var(--sub); margin-right: 16px; }
+
+    /* ── EXERCISES GRID ── */
+    .exercises {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .ex-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      transition: border-color .15s, transform .15s;
+      cursor: pointer;
+    }
+    .ex-card:hover {
+      border-color: var(--muted);
+      transform: translateY(-2px);
+    }
+    .ex-card.active {
+      border-color: var(--accent);
+      background: rgba(124,111,255,0.04);
+    }
+    .ex-icon {
+      font-size: 24px; margin-bottom: 14px;
+    }
+    .ex-card h4 {
+      font-size: 14px; font-weight: 700;
+      margin-bottom: 6px;
+      letter-spacing: -0.2px;
+    }
+    .ex-card p { font-size: 12px; color: var(--sub); line-height: 1.5; }
+    .ex-difficulty {
+      margin-top: 14px;
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.5px; text-transform: uppercase;
+    }
+    .diff-easy   { color: var(--green); }
+    .diff-medium { color: #ffb84f; }
+    .diff-hard   { color: var(--red); }
+
+    /* ── RESULT CARD ── */
+    .result-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 48px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .result-main .label {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--sub);
+      margin-bottom: 12px;
+    }
+    .result-value {
+      font-size: 72px; font-weight: 800;
+      letter-spacing: -3px;
+      line-height: 1;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+    .result-unit {
+      font-size: 14px; color: var(--sub);
+      margin-bottom: 24px;
+    }
+    .result-desc {
+      font-size: 13px; color: var(--sub);
+      line-height: 1.6;
+      max-width: 300px;
+    }
+
+    .result-games {
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .game-row {
+      display: flex; align-items: center;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 16px;
+      gap: 14px;
+    }
+    .game-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .game-name {
+      flex: 1; font-size: 13px; font-weight: 600;
+    }
+    .game-val {
+      font-size: 13px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      color: var(--text);
+    }
+    .game-copy {
+      font-size: 11px; color: var(--muted);
+      cursor: pointer;
+      transition: color .1s;
+    }
+    .game-copy:hover { color: var(--accent); }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px;
+      display: flex; align-items: center; justify-content: space-between;
+      max-width: 1100px; margin: 0 auto;
+    }
+    footer .logo { font-size: 15px; }
+    footer p { font-size: 12px; color: var(--sub); }
+
+    /* ── DIVIDER ── */
+    hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      section { padding: 60px 20px; }
+      .steps { grid-template-columns: 1fr; }
+      .step:first-child { border-radius: 16px 16px 0 0; }
+      .step:last-child  { border-radius: 0 0 16px 16px; }
+      .exercises { grid-template-columns: 1fr; }
+      .result-card { grid-template-columns: 1fr; gap: 32px; padding: 28px; }
+      .result-value { font-size: 52px; }
+      .stat-row { gap: 28px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <div class="logo">sensi<span>.</span></div>
+  <ul class="nav-links">
+    <li><a href="#how">Comment ça marche</a></li>
+    <li><a href="#test">Le test</a></li>
+    <li><a href="#convert">Conversion</a></li>
+  </ul>
+  <div style="display:flex;gap:10px">
+    <a href="#" class="btn btn-ghost">Connexion</a>
+    <a href="#test" class="btn btn-primary">Commencer →</a>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <div class="hero-badge">
+    <div class="dot"></div>
+    Bêta publique
+  </div>
+  <h1>Ta sensibilité<br /><em>parfaite</em>, enfin trouvée.</h1>
+  <p class="hero-sub">
+    Un test calibré qui analyse tes mouvements, calcule ta sensibilité idéale en cm/360°, et te donne les réglages exacts pour chaque jeu.
+  </p>
+  <div class="hero-cta">
+    <a href="#test" class="btn btn-primary" style="padding:12px 28px;font-size:14px">Lancer le test — gratuit</a>
+    <a href="#how" class="btn btn-ghost" style="padding:12px 28px;font-size:14px">Voir comment ça marche</a>
+  </div>
+  <div class="stat-row">
+    <div class="stat">
+      <div class="stat-val">3 min</div>
+      <div class="stat-lbl">Durée du test</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val">40+</div>
+      <div class="stat-lbl">Jeux supportés</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val">cm/360°</div>
+      <div class="stat-lbl">Standard universel</div>
+    </div>
+  </div>
+</div>
+
+<hr />
+
+<!-- ── HOW IT WORKS ── -->
+<section id="how">
+  <div class="section-label">Comment ça marche</div>
+  <h2>Simple, rapide,<br />précis.</h2>
+  <p class="section-sub">Trois étapes pour ne plus jamais tâtonner avec ta sensibilité.</p>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-icon">🖱️</div>
+      <h3>Entre ton DPI</h3>
+      <p>Renseigne le DPI de ta souris (trouvable sur le site du fabricant ou dans ton logiciel). C'est la seule info dont on a besoin.</p>
+    </div>
+    <div class="step">
+      <div class="step-icon">🎯</div>
+      <div class="step-num">02</div>
+      <h3>Passe les exercices</h3>
+      <p>Tracking, flick shots, micro-ajustements. Notre algo adapte la sensibilité en temps réel et converge vers ton optimum.</p>
+    </div>
+    <div class="step">
+      <div class="step-icon">⚡</div>
+      <div class="step-num">03</div>
+      <h3>Récupère tes réglages</h3>
+      <p>On te donne la valeur exacte à entrer dans chaque jeu, avec tous les détails (FOV, raw input, etc.).</p>
+    </div>
+  </div>
+</section>
+
+<hr />
+
+<!-- ── TEST PREVIEW ── -->
+<section id="test">
+  <div class="section-label">Le test</div>
+  <h2>Des exercices pensés<br />pour te calibrer.</h2>
+  <p class="section-sub">Chaque exercice mesure un aspect différent de ta précision.</p>
+
+  <!-- Exercise cards -->
+  <div class="exercises" style="margin-bottom:32px">
+    <div class="ex-card active">
+      <div class="ex-icon">🎯</div>
+      <h4>Flick Shot</h4>
+      <p>Snap instantané vers des cibles qui apparaissent à des positions aléatoires.</p>
+      <div class="ex-difficulty diff-medium">Medium</div>
+    </div>
+    <div class="ex-card">
+      <div class="ex-icon">🔄</div>
+      <h4>Tracking</h4>
+      <p>Maintiens ta visée sur une cible en mouvement fluide et continu.</p>
+      <div class="ex-difficulty diff-easy">Easy</div>
+    </div>
+    <div class="ex-card">
+      <div class="ex-icon">🔬</div>
+      <h4>Micro-ajustement</h4>
+      <p>Corrige une visée qui dépasse légèrement pour tester la précision fine.</p>
+      <div class="ex-difficulty diff-hard">Hard</div>
+    </div>
+  </div>
+
+  <!-- Canvas preview -->
+  <div class="test-preview">
+    <div class="test-header">
+      <div class="test-title">
+        Flick Shot
+        <span class="test-badge">En cours</span>
+      </div>
+      <div class="test-meta">
+        <span>⏱ 01:24</span>
+        <span>🎯 14/20 hits</span>
+        <span>📊 Série × 4</span>
+      </div>
+    </div>
+
+    <div class="test-canvas">
+      <div class="target target-ghost" style="top:18%;left:24%"></div>
+      <div class="target target-ghost" style="top:66%;left:68%"></div>
+      <div class="target target-ghost" style="top:72%;left:28%"></div>
+      <div class="target target-main"></div>
+      <div class="crosshair"></div>
+
+      <div class="test-hud">
+        <div class="hud-item"><span>SENS</span><span>38.4 cm/360</span></div>
+        <div class="hud-item"><span>PREC</span><span>71%</span></div>
+        <div class="hud-item"><span>AVG</span><span>187 ms</span></div>
+      </div>
+    </div>
+
+    <div class="test-footer">
+      <span class="progress-label">Exercice 1/3</span>
+      <div class="progress-wrap">
+        <div class="progress-bar"></div>
+      </div>
+      <div style="margin-left:20px;display:flex;gap:10px">
+        <button class="btn btn-ghost" style="font-size:12px;padding:7px 14px">Pause</button>
+        <button class="btn btn-primary" style="font-size:12px;padding:7px 14px">Suivant →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr />
+
+<!-- ── RESULT ── -->
+<section id="convert">
+  <div class="section-label">Résultat & conversion</div>
+  <h2>Ta sensibilité,<br />prête à l'emploi.</h2>
+  <p class="section-sub">On convertit automatiquement vers tous tes jeux.</p>
+
+  <div class="result-card">
+    <div class="result-main">
+      <div class="label">Ta sensibilité universelle</div>
+      <div class="result-value">38.4</div>
+      <div class="result-unit">cm / 360°</div>
+      <p class="result-desc">
+        Profil polyvalent — idéal pour les FPS compétitifs. Tu explores bien la map sans sacrifier la précision sur les duels rapprochés.
+      </p>
+    </div>
+
+    <div class="result-games">
+      <div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--sub);margin-bottom:4px">Réglages par jeu</div>
+
+      <div class="game-row">
+        <div class="game-dot" style="background:#e8642a"></div>
+        <div class="game-name">CS2</div>
+        <div class="game-val">1.24</div>
+        <div class="game-copy">copier</div>
+      </div>
+      <div class="game-row">
+        <div class="game-dot" style="background:#ff4757"></div>
+        <div class="game-name">Valorant</div>
+        <div class="game-val">0.413</div>
+        <div class="game-copy">copier</div>
+      </div>
+      <div class="game-row">
+        <div class="game-dot" style="background:#c8a951"></div>
+        <div class="game-name">Apex Legends</div>
+        <div class="game-val">2.89</div>
+        <div class="game-copy">copier</div>
+      </div>
+      <div class="game-row">
+        <div class="game-dot" style="background:#f5a623"></div>
+        <div class="game-name">Overwatch 2</div>
+        <div class="game-val">6.21</div>
+        <div class="game-copy">copier</div>
+      </div>
+      <div class="game-row">
+        <div class="game-dot" style="background:#00b4ff"></div>
+        <div class="game-name">Fortnite</div>
+        <div class="game-val">0.091</div>
+        <div class="game-copy">copier</div>
+      </div>
+
+      <button class="btn btn-ghost" style="justify-content:center;margin-top:4px;font-size:12px">
+        Voir tous les jeux (40+)
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<hr />
+<footer>
+  <div class="logo">sensi<span>.</span></div>
+  <p>Template — vision produit v0.1</p>
+</footer>
+
+</body>
+</html>
