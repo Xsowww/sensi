@@ -150,6 +150,44 @@ Changes against the upstream code:
 Tilt is 7 degrees at the corners rather than the upstream 10, which suits a
 form better than a small card.
 
+## LocationMap
+
+`src/components/ui/expanded-map.tsx` sits at the foot of every listing card:
+a row showing the district, which expands to a map centred on the property.
+Coordinates live in `src/data/listings.ts`.
+
+Changes against the upstream block:
+
+1. **`next/image` replaced with `<img>`.** Vite, not Next.js.
+2. **The shadcn theme classes it used did not exist here.** `bg-background`,
+   `text-foreground`, `border-border`, `bg-muted` and `text-muted-foreground`
+   all need tokens that `shadcn init` writes, and this project never ran it, so
+   Tailwind would not have emitted those utilities at all and the card would
+   have rendered unstyled. They now use the site's own palette.
+3. **Fluid width.** It animated between fixed 240px and 360px, which overflowed
+   the narrower listing cards on mobile. Only the height animates now.
+4. **`crossOrigin="anonymous"` dropped** from the tiles. It forces a CORS
+   request for images that never touch a canvas, so any tile server omitting
+   the header fails to load for no reason.
+5. **Keyboard access.** The whole card was a `div` with `onClick`, unreachable
+   by keyboard. It is a real `<button>` with `aria-expanded`/`aria-controls`.
+6. **Attribution.** OpenStreetMap data is ODbL; credit is required wherever
+   tiles are shown, and the upstream component had none.
+7. **Tiles load on open, not on mount.** Five listings would otherwise have
+   pulled 45 tiles on page load.
+8. **A fallback panel** when tiles cannot be fetched, instead of a grey
+   rectangle pulsing forever.
+
+### Known limitations
+
+- **Tiles are third-party.** They do not load where outbound requests are
+  blocked, including the published artifact, which falls back to the
+  coordinates panel.
+- **Tile usage policy.** `tile.openstreetmap.org` is not intended for
+  production traffic and CARTO basemaps have their own terms. A real
+  deployment needs its own tile plan.
+- Coordinates are approximate district centres, not surveyed addresses.
+
 ## Before going live
 
 1. **Replace the images.** Every `src` points at `picsum.photos`, which returns
@@ -162,6 +200,9 @@ form better than a small card.
 3. **Replace the sample content.** The five listings, the 2011 founding date,
    the address and the phone number are invented placeholders.
 4. Add a real `Mentions légales` page: the footer link is a stub.
+5. **Sort out map tiles.** See the LocationMap limitations above: pick a tile
+   provider whose terms cover this traffic, and replace the approximate
+   coordinates with the real ones.
 
 ## Licences
 

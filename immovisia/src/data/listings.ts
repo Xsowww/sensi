@@ -5,6 +5,8 @@ export interface Listing {
   place: string;
   specs: string[];
   price: string;
+  /** Approximate position of the property, for the map card. */
+  coords: { lat: number; lng: number };
   photo: { src: string; width: number; height: number; alt: string };
   /** Column span in the 12-column bento, and the media aspect it carries. */
   span: 5 | 7 | 12;
@@ -15,6 +17,7 @@ export interface Listing {
 export const listings: Listing[] = [
   {
     id: 'trespoey',
+    coords: { lat: 43.3046, lng: -0.3521 }, // Trespoëy, east Pau
     kind: 'Maison',
     title: 'Contemporaine sur parc clos',
     place: 'Trespoëy, Pau',
@@ -31,6 +34,7 @@ export const listings: Listing[] = [
   },
   {
     id: 'pyrenees',
+    coords: { lat: 43.2949, lng: -0.3707 }, // Boulevard des Pyrénées
     kind: 'Appartement',
     title: 'Balcon plein sud sur les Pyrénées',
     place: 'Boulevard des Pyrénées, Pau',
@@ -47,6 +51,7 @@ export const listings: Listing[] = [
   },
   {
     id: 'halles',
+    coords: { lat: 43.2963, lng: -0.3689 }, // Les Halles
     kind: 'Appartement',
     title: 'Deux pièces rénové, pierre apparente',
     place: 'Les Halles, Pau',
@@ -63,6 +68,7 @@ export const listings: Listing[] = [
   },
   {
     id: 'jurancon',
+    coords: { lat: 43.2892, lng: -0.3833 }, // Jurançon
     kind: 'Maison',
     title: 'Béarnaise rénovée, vue vignes',
     place: 'Jurançon',
@@ -79,6 +85,7 @@ export const listings: Listing[] = [
   },
   {
     id: 'gan',
+    coords: { lat: 43.2247, lng: -0.3856 }, // Gan
     kind: 'Maison',
     title: 'Familiale sur 2 400 m² arborés',
     place: 'Gan',

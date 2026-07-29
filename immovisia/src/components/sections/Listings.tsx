@@ -1,4 +1,5 @@
 import { listings, type Listing } from '@/data/listings';
+import { LocationMap } from '@/components/ui/expanded-map';
 import { useReveal } from '@/hooks/useReveal';
 
 function ListingCard({ listing, index }: { listing: Listing; index: number }) {
@@ -34,6 +35,15 @@ function ListingCard({ listing, index }: { listing: Listing; index: number }) {
           <p className="card__price">{listing.price}</p>
         </div>
       </a>
+
+      <div className="card__map">
+        <LocationMap
+          location={listing.place}
+          latitude={listing.coords.lat}
+          longitude={listing.coords.lng}
+          zoom={15}
+        />
+      </div>
     </article>
   );
 }
