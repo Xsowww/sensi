@@ -18,7 +18,7 @@ npm run typecheck
 | `index.html` | Vite entry, meta tags, JSON-LD `RealEstateAgent` |
 | `src/index.css` | `@import "tailwindcss"` plus the design system |
 | `src/App.tsx` | Section composition |
-| `src/components/sections/` | Nav, Hero, Statement, Listings, Services, Contact, Footer |
+| `src/components/sections/` | Intro, Nav, Hero, Statement, Listings, Services, Contact, Footer |
 | `src/components/ui/` | shadcn components (`@/components/ui`) |
 | `src/hooks/useReveal.ts` | Scroll reveal and sticky-nav state |
 | `src/data/listings.ts` | Sample inventory |
@@ -77,11 +77,53 @@ retunes the backdrop, brightness and shadow for pale grounds.
   `:focus-visible` treatment if these cards become interactive.
 - The glow is decorative and drops out under forced-colors mode.
 
+## ScrollExpandMedia
+
+`src/components/ui/scroll-expansion-hero.tsx` is the opening sequence: the
+photo expands as you scroll, then the page proper begins underneath. Wired up
+in `src/components/sections/Intro.tsx`.
+
+Adapting the upstream block required:
+
+1. **`next/image` replaced with `<img>`.** This is a Vite app, not Next.js, so
+   the original import could not resolve at all.
+2. **`motion/react` instead of `framer-motion`**, the current package name for
+   the same library.
+3. **Native event types**, replacing React's synthetic `WheelEvent` and
+   `TouchEvent` on `window` listeners and the `as unknown as EventListener`
+   casts they forced.
+4. **Progress kept in a ref.** The effect listed `scrollProgress` as a
+   dependency, so every wheel tick tore down and re-added five window
+   listeners. They are now bound once.
+
+Three interaction defects also had to be fixed, because the component pins the
+window at `scrollY 0` until it has been expanded:
+
+- **Keyboard was trapped.** Only wheel and touch advanced the animation, so
+  keyboard users could never reach the rest of the page. Tab, PageDown, arrows,
+  space and End now open it immediately.
+- **In-page anchors were dead.** Clicking any nav link did nothing until the
+  intro had been expanded. A capture-phase click handler releases the lock
+  first.
+- **`prefers-reduced-motion` was ignored.** It now skips the lock entirely and
+  renders open.
+
+`textBlend` is available but left off here: `mix-blend-difference` made the
+first title word muddy where it crossed the media frame.
+
+### Known limitations
+
+- The section still takes over the wheel on first load, which is inherent to
+  the effect. Anyone who dislikes that can reach the content with a nav link,
+  the keyboard, or by setting reduced motion.
+
 ## Before going live
 
 1. **Replace the images.** Every `src` points at `picsum.photos`, which returns
    an unrelated random photo per seed. Slots and sizes: hero 1000x1250,
-   listings 1200x800, 800x1000, 800x1000, 1200x800, 1200x750.
+   listings 1200x800, 800x1000, 800x1000, 1200x800, 1200x750. The intro needs
+   two more: a Pau panorama at 1920x1080 for the background and a local
+   property at 1280x720 for the expanding frame.
 2. **Wire the contact form.** `Contact.tsx` only drives the success state; it
    posts nothing. See the `TODO` in the submit handler.
 3. **Replace the sample content.** The five listings, the 2011 founding date,

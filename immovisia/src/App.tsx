@@ -1,5 +1,6 @@
 import { IconSprite } from '@/components/IconSprite';
 import { Nav } from '@/components/sections/Nav';
+import { Intro } from '@/components/sections/Intro';
 import { Hero } from '@/components/sections/Hero';
 import { Statement } from '@/components/sections/Statement';
 import { Listings } from '@/components/sections/Listings';
@@ -19,6 +20,7 @@ export default function App() {
       <Nav />
 
       <main id="main">
+        <Intro />
         <Hero />
         <Statement />
         <Listings />
