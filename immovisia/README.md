@@ -1,50 +1,94 @@
 # Immo'visia
 
-Homepage for a fictional real estate agency in Pau (64000). Static: no build
-step, no framework, no runtime dependencies. Open `index.html` or serve the
-folder.
+Homepage for a fictional real estate agency in Pau (64000). React 19 + Vite +
+TypeScript + Tailwind 4, with the shadcn layout conventions.
 
-```
-python3 -m http.server 8000
+```bash
+npm install
+npm run dev        # dev server
+npm run build      # typecheck, bundle, then prerender to static HTML
+npm run preview    # serve the build
+npm run typecheck
 ```
 
 ## Layout
 
-| File | Role |
+| Path | Role |
 | --- | --- |
-| `index.html` | Markup, JSON-LD `RealEstateAgent` schema, inlined icon sprite |
-| `style.css` | Tokens and all component styles |
-| `main.js` | Sticky nav, scroll reveal, mobile menu, form validation |
-| `assets/fonts/` | Outfit (display) and Manrope (body), variable, latin subset |
-| `assets/icons/` | Phosphor source SVGs the inline sprite was built from |
+| `index.html` | Vite entry, meta tags, JSON-LD `RealEstateAgent` |
+| `src/index.css` | `@import "tailwindcss"` plus the design system |
+| `src/App.tsx` | Section composition |
+| `src/components/sections/` | Nav, Hero, Statement, Listings, Services, Contact, Footer |
+| `src/components/ui/` | shadcn components (`@/components/ui`) |
+| `src/hooks/useReveal.ts` | Scroll reveal and sticky-nav state |
+| `src/data/listings.ts` | Sample inventory |
+| `src/assets/` | Self-hosted fonts, Phosphor icon sources |
+
+`components.json` maps `@/components/ui` to `src/components/ui`, which is where
+`npx shadcn@latest add <component>` writes. Note TypeScript 6 deprecates
+`baseUrl`, so `tsconfig` declares `paths` alone.
 
 ## Design decisions
 
 - **Light theme only.** The brief specifies a soft sky blue background, so
   there is no dark variant: inverting it would discard the brand.
-- **One accent** (`--accent: #b3580f`) for every CTA and detail. White on it
-  measures 4.86:1, and it measures 4.54:1 as text on the page background, so
-  both uses clear WCAG AA.
+- **Tailwind alongside plain CSS.** The design system is the stylesheet carried
+  over from the static build, contrast ratios and all. Tailwind is installed
+  because the shadcn components consume it; rewriting 965 verified lines into
+  utilities would only have risked regressions.
+- **One accent** (`--accent: #b3580f`). White on it measures 4.86:1, and it
+  measures 4.54:1 as text on the page background, so both clear WCAG AA.
 - **Radius rule:** buttons are full pills, everything else uses `--r` (18px).
-- **Self-hosted fonts.** No Google Fonts CDN call, which also keeps the page
-  clear of the GDPR problem French courts have flagged with hotlinked fonts.
+- **Self-hosted fonts**, which also avoids the GDPR problem French courts have
+  flagged with hotlinked Google Fonts.
+- **Prerendered.** `npm run build` renders the app to static HTML via
+  `src/entry-server.tsx`, then the client hydrates it. Without this a
+  client-only SPA shows a blank page with JavaScript disabled, which the static
+  version did not.
 - **Scroll effects use IntersectionObserver**, never a scroll listener, and
-  collapse to static under `prefers-reduced-motion`. Content stays visible
-  with JavaScript disabled.
+  collapse to static under `prefers-reduced-motion`.
+
+## GlowCard
+
+`src/components/ui/spotlight-card.tsx` renders a card whose border carries a
+spotlight following the pointer. The services section uses it with
+`glowColor="brand" variant="light"`.
+
+Three defects in the upstream component were fixed to make it work here:
+
+1. **The border ring never painted.** The mask intersected a fully transparent
+   layer with an opaque one, which is transparent everywhere. Replaced with two
+   opaque layers clipped to padding-box and border-box and subtracted.
+2. **The spotlight tracked the wrong place.** It fed viewport coordinates into a
+   `background-attachment: fixed` layer, but Chromium sizes that layer against
+   the element while positioning it against the viewport, so the glow landed far
+   from the cursor. Now element-local, which also drops the fixed-attachment
+   repaint cost that janks on iOS.
+3. **Per-instance globals.** Each card injected its own copy of the stylesheet
+   and its own `pointermove` listener. Both are now shared, with rect reads
+   batched into one animation frame.
+
+The `variant` prop is additive: `dark` keeps the original rendering, `light`
+retunes the backdrop, brightness and shadow for pale grounds.
+
+### Known limitations
+
+- **Pointer only.** The glow never appears on touch or keyboard focus. Add a
+  `:focus-visible` treatment if these cards become interactive.
+- The glow is decorative and drops out under forced-colors mode.
 
 ## Before going live
 
-1. **Replace the images.** Every `src` points at `picsum.photos`, which
-   returns an unrelated random photo per seed. Real slots and sizes:
-   hero 1000x1250, listings 1200x800, 800x1000, 800x1000, 1200x800, 1200x750.
-2. **Wire the contact form.** `main.js` only drives the success state; it
+1. **Replace the images.** Every `src` points at `picsum.photos`, which returns
+   an unrelated random photo per seed. Slots and sizes: hero 1000x1250,
+   listings 1200x800, 800x1000, 800x1000, 1200x800, 1200x750.
+2. **Wire the contact form.** `Contact.tsx` only drives the success state; it
    posts nothing. See the `TODO` in the submit handler.
 3. **Replace the sample content.** The five listings, the 2011 founding date,
-   the address, the phone number and the CPI licence number are all invented
-   placeholders.
+   the address and the phone number are invented placeholders.
 4. Add a real `Mentions légales` page: the footer link is a stub.
 
 ## Licences
 
-Fonts and icons are vendored from npm, licences kept alongside them. Outfit
-and Manrope are SIL OFL; Phosphor Icons is MIT.
+Fonts and icons are vendored from npm, licences kept alongside them. Outfit and
+Manrope are SIL OFL; Phosphor Icons is MIT.

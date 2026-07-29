@@ -1,3 +1,9 @@
+@import "tailwindcss";
+
+/* The design system below is the verified stylesheet from the static build:
+   tokens, contrast ratios and layout are unchanged by the React migration.
+   Tailwind sits alongside it and is what the shadcn components consume. */
+
 /* =========================================================================
    Immo'visia
    Light theme, locked. The brief specifies a soft sky blue background, so the
@@ -16,7 +22,7 @@
   font-style: normal;
   font-display: swap;
   font-weight: 100 900;
-  src: url(assets/fonts/outfit-latin-var.woff2) format('woff2-variations');
+  src: url('./assets/fonts/outfit-latin-var.woff2') format('woff2-variations');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
     U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
     U+2212, U+2215, U+FEFF, U+FFFD;
@@ -27,7 +33,7 @@
   font-style: normal;
   font-display: swap;
   font-weight: 200 800;
-  src: url(assets/fonts/manrope-latin-var.woff2) format('woff2-variations');
+  src: url('./assets/fonts/manrope-latin-var.woff2') format('woff2-variations');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
     U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
     U+2212, U+2215, U+FEFF, U+FFFD;
@@ -962,4 +968,20 @@ ul {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* ---------- spotlight card, tuned for this palette ---------- */
+
+.service-card {
+  height: 100%;
+  border-top: 0;
+  padding-top: 0;
+}
+
+.service-card .service__icon {
+  margin-bottom: 0;
+}
+
+.service-card .service__title {
+  margin-top: 0.15rem;
 }
