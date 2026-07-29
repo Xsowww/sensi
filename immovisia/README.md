@@ -18,7 +18,8 @@ npm run typecheck
 | `index.html` | Vite entry, meta tags, JSON-LD `RealEstateAgent` |
 | `src/index.css` | `@import "tailwindcss"` plus the design system |
 | `src/App.tsx` | Section composition |
-| `src/components/sections/` | Intro, Nav, Statement, Listings, Services, Contact, Footer |
+| `src/components/sections/` | Intro, Nav, Statement, Listings, Services, Contact, Property, Footer |
+| `src/components/SectionLink.tsx` | In-page links that survive hash routing |
 | `src/components/ui/` | shadcn components (`@/components/ui`) |
 | `src/hooks/useReveal.ts` | Scroll reveal and sticky-nav state |
 | `src/data/listings.ts` | Sample inventory |
@@ -47,6 +48,35 @@ npm run typecheck
   version did not.
 - **Scroll effects use IntersectionObserver**, never a scroll listener, and
   collapse to static under `prefers-reduced-motion`.
+
+## Routing
+
+Two routes: `/` and `/bien/:id`, one detail page per listing.
+
+**Hash routing** (`#/bien/gan`), chosen so the build stays a set of static files:
+no server rewrites, works from a subdirectory, and works inside the single-file
+artifact. The cost is SEO, since crawlers do not index hash routes and only `/`
+is prerendered.
+
+*To deploy for real:* swap `HashRouter` for `BrowserRouter` in `src/main.tsx`,
+extend `prerender.mjs` to loop over `listings` and emit
+`dist/bien/<id>/index.html` for each, and set `base: '/'` in `vite.config.ts`.
+Every listing then has a real, indexable URL.
+
+Because the hash belongs to the router, in-page anchors cannot be plain
+`href="#biens"`: that reads as a navigation to `/biens` and lands on the
+not-found panel. `SectionLink` keeps the href, for semantics and for the no-JS
+prerender where the browser simply jumps to the element, but intercepts the
+click and scrolls, navigating home first when it is on a detail page. Arriving
+home with a section target also starts the intro already expanded, otherwise
+its scroll lock would immediately undo the jump.
+
+## Listings
+
+Two tabs, `Acheter` and `Louer`, filtering one row per property: photo left,
+title with a summary and feature pills in the middle, the location map on the
+right, and a call to action opening the detail page. The tabs follow the ARIA
+tabs pattern, including left and right arrow keys.
 
 ## GlowCard
 

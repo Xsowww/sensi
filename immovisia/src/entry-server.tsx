@@ -1,7 +1,12 @@
 import { renderToString } from 'react-dom/server';
+import { StaticRouter } from 'react-router-dom';
 import App from '@/App';
 
-/** Used by prerender.mjs at build time to bake static HTML into dist/index.html. */
-export function render() {
-  return renderToString(<App />);
+/** Used by prerender.mjs. Only "/" is baked: the hash routes are client-side. */
+export function render(url = '/') {
+  return renderToString(
+    <StaticRouter location={url}>
+      <App />
+    </StaticRouter>
+  );
 }

@@ -1,28 +1,30 @@
+import { Link } from 'react-router-dom';
 import { Icon } from '@/components/IconSprite';
+import { SectionLink } from '@/components/SectionLink';
 
-const links = [
-  { href: '#biens', label: 'Nos biens' },
-  { href: '#services', label: 'Services' },
-  { href: '#contact', label: 'Contact' },
-  { href: '#', label: 'Mentions légales' },
+const sections = [
+  { section: 'biens', label: 'Nos biens' },
+  { section: 'services', label: 'Services' },
+  { section: 'contact', label: 'Contact' },
 ];
 
 export function Footer() {
   return (
     <footer className="foot">
       <div className="wrap foot__inner">
-        <a className="brand brand--foot" href="#main" aria-label="Immo’visia, accueil">
+        <Link className="brand brand--foot" to="/" aria-label="Immo’visia, accueil">
           <span className="brand__mark" aria-hidden="true">
             <Icon name="house-line" />
           </span>
           <span className="brand__name">Immo’visia</span>
-        </a>
+        </Link>
         <nav className="foot__links" aria-label="Liens de bas de page">
-          {links.map((link) => (
-            <a key={link.label} href={link.href}>
+          {sections.map((link) => (
+            <SectionLink key={link.section} section={link.section}>
               {link.label}
-            </a>
+            </SectionLink>
           ))}
+          <a href="#">Mentions légales</a>
         </nav>
         <p className="foot__legal">
           © {new Date().getFullYear()} Immo’visia, agence immobilière à Pau.

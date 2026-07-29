@@ -209,6 +209,7 @@ export function LocationMap({
                 </div>
               ) : (
                 <>
+                  {status === 'ready' && (
                   <div className="locmap__tiles">
                     {tiles.map((tile) => (
                       <img
@@ -226,8 +227,9 @@ export function LocationMap({
                       />
                     ))}
                   </div>
+                  )}
 
-                  {status === 'loading' && <div className="locmap__skeleton" />}
+                  {status !== 'ready' && <div className="locmap__skeleton" />}
 
                   <span className="locmap__marker" aria-hidden="true">
                     <svg viewBox="0 0 24 24" fill="none">

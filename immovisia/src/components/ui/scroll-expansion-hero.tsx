@@ -26,6 +26,8 @@ interface ScrollExpandMediaProps {
   date?: string;
   scrollToExpand?: string;
   textBlend?: boolean;
+  /** Start open, skipping the scroll lock entirely. */
+  defaultExpanded?: boolean;
   children?: ReactNode;
 }
 
@@ -45,16 +47,17 @@ const ScrollExpandMedia = ({
   date,
   scrollToExpand,
   textBlend,
+  defaultExpanded = false,
   children,
 }: ScrollExpandMediaProps) => {
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [showContent, setShowContent] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(defaultExpanded ? 1 : 0);
+  const [showContent, setShowContent] = useState(defaultExpanded);
   const [isMobileState, setIsMobileState] = useState(false);
 
   // Mirrors of the two values the listeners need, so the effect below can bind
   // once instead of tearing down five window listeners on every scroll tick.
-  const progressRef = useRef(0);
-  const expandedRef = useRef(false);
+  const progressRef = useRef(defaultExpanded ? 1 : 0);
+  const expandedRef = useRef(defaultExpanded);
   const touchStartYRef = useRef(0);
 
   const setProgress = (next: number) => {
@@ -78,9 +81,8 @@ const ScrollExpandMedia = ({
   };
 
   useEffect(() => {
-    // Anyone who asked for less motion gets the page already open, never the
-    // scroll lock.
-    if (prefersReducedMotion()) {
+    // Already open, or the visitor asked for less motion: no lock at all.
+    if (defaultExpanded || prefersReducedMotion()) {
       finish();
       return;
     }
@@ -167,7 +169,7 @@ const ScrollExpandMedia = ({
       window.removeEventListener('keydown', handleKeyDown);
       document.removeEventListener('click', handleAnchorClick, true);
     };
-  }, []);
+  }, [defaultExpanded]);
 
   useEffect(() => {
     const checkIfMobile = () => setIsMobileState(window.innerWidth < 768);
