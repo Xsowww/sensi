@@ -18,7 +18,7 @@ npm run typecheck
 | `index.html` | Vite entry, meta tags, JSON-LD `RealEstateAgent` |
 | `src/index.css` | `@import "tailwindcss"` plus the design system |
 | `src/App.tsx` | Section composition |
-| `src/components/sections/` | Intro, Nav, Hero, Statement, Listings, Services, Contact, Footer |
+| `src/components/sections/` | Intro, Nav, Statement, Listings, Services, Contact, Footer |
 | `src/components/ui/` | shadcn components (`@/components/ui`) |
 | `src/hooks/useReveal.ts` | Scroll reveal and sticky-nav state |
 | `src/data/listings.ts` | Sample inventory |
@@ -79,9 +79,12 @@ retunes the backdrop, brightness and shadow for pale grounds.
 
 ## ScrollExpandMedia
 
-`src/components/ui/scroll-expansion-hero.tsx` is the opening sequence: the
-photo expands as you scroll, then the page proper begins underneath. Wired up
-in `src/components/sections/Intro.tsx`.
+`src/components/ui/scroll-expansion-hero.tsx` is the opening sequence, wired up
+in `src/components/sections/Intro.tsx`. It carries the brand presentation too:
+the wordmark sits over the photo, the photo expands as you scroll, then the
+positioning line and the calls to action arrive underneath. There is no separate
+hero section any more, so the page opens on one full-height moment rather than
+two in a row.
 
 Adapting the upstream block required:
 
@@ -116,6 +119,9 @@ first title word muddy where it crossed the media frame.
 - The section still takes over the wheel on first load, which is inherent to
   the effect. Anyone who dislikes that can reach the content with a nav link,
   the keyboard, or by setting reduced motion.
+- Merging the hero in means the page's own calls to action only appear once the
+  photo has expanded. The nav keeps "Estimer mon bien" visible throughout, so
+  there is still a conversion path above the fold.
 
 ## TiltCard
 

@@ -393,30 +393,7 @@ ul {
   }
 }
 
-/* ---------- hero: asymmetric split ---------- */
-
-.hero {
-  min-height: 100dvh;
-  display: flex;
-  align-items: center;
-  padding-top: calc(var(--nav-h) + 1.5rem);
-  padding-bottom: clamp(3rem, 8vh, 5rem);
-  background: linear-gradient(180deg, #f8fbfe 0%, var(--bg) 62%);
-}
-
-.hero__grid {
-  display: grid;
-  grid-template-columns: 1.02fr 0.98fr;
-  gap: clamp(2rem, 5vw, 4.5rem);
-  align-items: center;
-}
-
-.hero__title {
-  font-size: clamp(3.4rem, 11vw, 8.25rem);
-  font-weight: 700;
-  letter-spacing: -0.045em;
-  line-height: 0.92;
-}
+/* ---------- brand presentation, now rendered inside the intro ---------- */
 
 .hero__rule {
   display: block;
@@ -440,66 +417,32 @@ ul {
   margin-top: clamp(1.75rem, 4vw, 2.5rem);
 }
 
-.hero__media {
-  margin: 0;
-  border-radius: var(--r);
-  overflow: hidden;
-  box-shadow: var(--shadow-lg);
-  transform: translateY(clamp(0px, 2vw, 28px));
+/* ---------- intro: brand presentation merged into the expanding photo ---------- */
+
+.intro__wordmark {
+  font-family: var(--font-display);
+  font-size: clamp(3.4rem, 11vw, 8.25rem);
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 0.92;
 }
 
-.hero__media img {
-  width: 100%;
-  /* Explicit height rather than a bare aspect-ratio: it caps how tall the hero
-     row can grow, keeps the copy from drifting down the viewport, and pins CLS. */
-  height: clamp(26rem, 72vh, 46rem);
-  object-fit: cover;
+.intro__copy {
+  max-width: 46ch;
+  margin-inline: auto;
+  text-align: center;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .js .hero__copy > *,
-  .js .hero__media {
-    animation: rise 0.85s var(--ease) both;
-  }
-
-  .js .hero__title { animation-delay: 0.05s; }
-  .js .hero__rule { animation-delay: 0.14s; }
-  .js .hero__lede { animation-delay: 0.2s; }
-  .js .hero__actions { animation-delay: 0.28s; }
-  .js .hero__media { animation-delay: 0.16s; }
+.intro__copy .hero__rule {
+  margin-inline: auto;
 }
 
-@keyframes rise {
-  from {
-    opacity: 0;
-    transform: translateY(26px);
-  }
+.intro__copy .hero__lede {
+  max-width: none;
 }
 
-@media (max-width: 900px) {
-  .hero {
-    min-height: auto;
-    padding-top: calc(var(--nav-h) + 1.25rem);
-    padding-bottom: 4rem;
-  }
-
-  .hero__grid {
-    grid-template-columns: 1fr;
-  }
-
-  .hero__media {
-    transform: none;
-    order: -1;
-  }
-
-  .hero__media img {
-    height: auto;
-    aspect-ratio: 3 / 2;
-  }
-
-  .hero__lede {
-    max-width: 46ch;
-  }
+.intro__copy .hero__actions {
+  justify-content: center;
 }
 
 /* ---------- section furniture ---------- */

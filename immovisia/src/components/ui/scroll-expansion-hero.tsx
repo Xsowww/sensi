@@ -21,6 +21,8 @@ interface ScrollExpandMediaProps {
   bgImageAlt?: string;
   mediaAlt?: string;
   title?: string;
+  /** Appended to the title, so a wordmark can be scaled past the default. */
+  titleClassName?: string;
   date?: string;
   scrollToExpand?: string;
   textBlend?: boolean;
@@ -39,6 +41,7 @@ const ScrollExpandMedia = ({
   bgImageAlt = '',
   mediaAlt,
   title,
+  titleClassName = '',
   date,
   scrollToExpand,
   textBlend,
@@ -280,17 +283,19 @@ const ScrollExpandMedia = ({
                 }`}
               >
                 <h2
-                  className="text-4xl md:text-5xl lg:text-6xl font-bold text-[#f2f8fd]"
+                  className={`text-4xl md:text-5xl lg:text-6xl font-bold text-[#f2f8fd] ${titleClassName}`}
                   style={{ transform: `translateX(-${textTranslateX}vw)` }}
                 >
                   {firstWord}
                 </h2>
-                <h2
-                  className="text-4xl md:text-5xl lg:text-6xl font-bold text-center text-[#f2f8fd]"
-                  style={{ transform: `translateX(${textTranslateX}vw)` }}
-                >
-                  {restOfTitle}
-                </h2>
+                {restOfTitle && (
+                  <h2
+                    className={`text-4xl md:text-5xl lg:text-6xl font-bold text-center text-[#f2f8fd] ${titleClassName}`}
+                    style={{ transform: `translateX(${textTranslateX}vw)` }}
+                  >
+                    {restOfTitle}
+                  </h2>
+                )}
               </div>
             </div>
 
