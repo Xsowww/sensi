@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Icon } from '@/components/IconSprite';
 import { useReveal } from '@/hooks/useReveal';
+import { TiltCard } from '@/components/ui/tilt-card';
 
 type FieldName = 'name' | 'email' | 'message';
 
@@ -123,7 +124,9 @@ export function Contact() {
           </p>
         </div>
 
-        <div className={`contact__panel ${panel.className}`} ref={panel.ref}>
+        <div className={`contact__panel-slot ${panel.className}`} ref={panel.ref}>
+          <TiltCard className="h-full">
+            <div className="contact__panel">
           {status === 'sent' ? (
             <div className="form__done" role="status">
               <span className="form__done-icon" aria-hidden="true">
@@ -165,6 +168,8 @@ export function Contact() {
               </p>
             </form>
           )}
+            </div>
+          </TiltCard>
         </div>
 
         <ul className={`contact__details ${details.className}`} ref={details.ref}>

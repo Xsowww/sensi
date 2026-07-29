@@ -117,6 +117,33 @@ first title word muddy where it crossed the media frame.
   the effect. Anyone who dislikes that can reach the content with a nav link,
   the keyboard, or by setting reduced motion.
 
+## TiltCard
+
+`src/components/ui/tilt-card.tsx` wraps the contact panel: it tilts in 3D
+towards the pointer and runs light beams along its border.
+
+It is the reusable half of the sign-in-card block. **The sign-in form itself was
+not carried over** - email, password, "remember me" and Google sign-in have no
+place in an estate agency's enquiry form - and the dark purple treatment was
+replaced by the page palette.
+
+Changes against the upstream code:
+
+1. **`next/link` dropped.** This is Vite, not Next.js, so the import could not
+   resolve.
+2. **`motion/react` instead of `framer-motion`.**
+3. **Removed a per-frame state update.** `setMousePosition` re-rendered the
+   whole card on every mouse move and its value was never read anywhere. The
+   rotation already runs on motion values, off the render path.
+4. **Removed `whileFocus` from the wrapper divs.** A `div` is not focusable, so
+   it never fired.
+5. **Honours `prefers-reduced-motion`**, dropping both the tilt and the beams.
+6. **Holds flat while a field inside has focus.** A form that tilts while you
+   type is unusable; capture-phase focus handlers freeze it.
+
+Tilt is 7 degrees at the corners rather than the upstream 10, which suits a
+form better than a small card.
+
 ## Before going live
 
 1. **Replace the images.** Every `src` points at `picsum.photos`, which returns

@@ -758,9 +758,14 @@ ul {
   grid-column: 1;
 }
 
-.contact__panel {
+/* Grid placement lives on the slot so the tilt wrapper can sit between the
+   grid and the painted card without disturbing the layout. */
+.contact__panel-slot {
   grid-column: 2;
   grid-row: 1 / span 2;
+}
+
+.contact__panel {
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--r);
@@ -810,7 +815,7 @@ ul {
   }
 
   .contact__intro,
-  .contact__panel,
+  .contact__panel-slot,
   .contact__details {
     grid-column: 1;
     grid-row: auto;
